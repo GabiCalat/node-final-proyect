@@ -1,12 +1,12 @@
 import expres from "express";
-import {getAllEmployers,getAllEmployersById,createEmployer} from "../controllers/employers.controllers.js";
+import { getAllEmployers, getAllEmployersById, createEmployer } from "../controllers/employers.controllers.js";
 
 
-const router= expres.Router();
+const employersRoutes = expres.Router();
 
-router.get("/", getAllEmployers);
-router.get("/:id",getAllEmployersById)
-router.post("/create",createEmployer);
+employersRoutes.get("/", getAllEmployers);
+employersRoutes.get("/:id", getAllEmployersById)
+employersRoutes.post("/create", createEmployer);
 
 
-export {router}
+export { employersRoutes }

@@ -1,57 +1,91 @@
-import {Employer} from "../models/employers.models.js"
+import { Employer } from "../models/employers.models.js"
 import { httpStatusCode } from "../../utils/seeds/httpStatusCode.js"
 
-const getAllEmployers=async(req,res,next)=>{
+//get all employers
+const getAllEmployers = async (req, res, next) => {
     try {
-        const employers=await Employer.find();
+        const employers = await Employer.find();
         return res.json({
-            status:200,
-            message:httpStatusCode[200],
-            data:employers,
+            status: 200,
+            message: httpStatusCode[200],
+            data: employers,
 
         });
-        
+
     } catch (error) {
-        
+
         return next(error);
     }
 };
 
-const getAllEmployersById=async(req,res,next)=>{
 
-    try{
+//employers only by id
+const getAllEmployersById = async (req, res, next) => {
 
-        const {id}=req.params;
+    try {
+
+        const { id } = req.params;
         console.log(id);
 
-        const employerbyid=await Employer.findById(id);
+        const employerbyid = await Employer.findById(id);
         return res.json({
-            status:200,
-            message:httpStatusCode[200],
-            data:{employers:employerbyid}
+            status: 200,
+            message: httpStatusCode[200],
+            data: { employers: employerbyid }
         });
 
-    } catch(error){
+    } catch (error) {
 
         return next(error);
     }
 };
 
-const createEmployer=async(req,res,next)=>{
+/**
+ * POST
+ * Create employer
+ * 
+ * 
+ */
+const createEmployer = async (req, res, next) => {
+
+    const { body } = req;
+
     try {
         
-        const newEmployer=new Employer(req.body);
-    
-    const newEmployerDB= await newEmployer.save();
-    return res.json({
-        status:201,
-        message:httpStatusCode[201],
-        data: {employer:newEmployerDB},
-    });
-    } catch(error){
-        return next(error);
-    
-    }
-    };
+        const newEmployer = new Employer({
+            name: body.name,
+            surname: body.surname,
+            email: body.email,
+            job: body.job,
+            age: body.age,
+            number: body.number,
+        });
 
-    export {getAllEmployers,getAllEmployersById,createEmployer};
+        const savedEmployer = await newEmployer.save();
+
+        return res.json({
+            status: 201,
+            message: 'Registered successfully',
+            data: savedEmployer
+        });
+    } catch (error) {
+        return next(error);
+        
+    }
+
+/*     try {
+
+        const newEmployer = new Employer(req.body);
+
+        const newEmployerDB = await newEmployer.save();
+        return res.json({
+            status: 201,
+            message: httpStatusCode[201],
+            data: { employer: newEmployerDB },
+        });
+    } catch (error) {
+        return next(error);
+    } */
+};
+
+export { getAllEmployers, getAllEmployersById, createEmployer };

@@ -6,7 +6,7 @@ const employersRoutes = expres.Router();
 
 employersRoutes.get("/", getAllEmployers);
 employersRoutes.get("/:id", getAllEmployersById)
-employersRoutes.post("/create", createEmployer);
+employersRoutes.post("/", createEmployer);
 
 
 export { employersRoutes }

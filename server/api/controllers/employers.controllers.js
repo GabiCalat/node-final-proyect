@@ -51,7 +51,7 @@ const createEmployer = async (req, res, next) => {
     const { body } = req;
 
     try {
-        
+
         const newEmployer = new Employer({
             name: body.name,
             surname: body.surname,
@@ -70,22 +70,22 @@ const createEmployer = async (req, res, next) => {
         });
     } catch (error) {
         return next(error);
-        
+
     }
 
-/*     try {
-
-        const newEmployer = new Employer(req.body);
-
-        const newEmployerDB = await newEmployer.save();
-        return res.json({
-            status: 201,
-            message: httpStatusCode[201],
-            data: { employer: newEmployerDB },
-        });
-    } catch (error) {
-        return next(error);
-    } */
+    /*     try {
+    
+            const newEmployer = new Employer(req.body);
+    
+            const newEmployerDB = await newEmployer.save();
+            return res.json({
+                status: 201,
+                message: httpStatusCode[201],
+                data: { employer: newEmployerDB },
+            });
+        } catch (error) {
+            return next(error);
+        } */
 };
 
 export { getAllEmployers, getAllEmployersById, createEmployer };

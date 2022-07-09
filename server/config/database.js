@@ -19,8 +19,6 @@ const connection = async () => {
 
 export { DB_URL, connection }
 
-
-
 /* import mongoose from "mongoose";
 import dotenv from "dotenv";
 

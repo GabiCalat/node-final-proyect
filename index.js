@@ -1,29 +1,53 @@
 import express from "express";
-import dotenv from "dotenv";
+import 'dotenv/config';
+
 import { connection } from "./server/config/database.js"
 import cors from "cors";
 import { employersRoutes } from "./server/api/routes/employers.routes.js";
 
-
-// import {router as employersRoutes} from "./server/api/routes/employers.routes.js"
-dotenv.config();
-
-const server = express();
 connection();
 
 const PORT = process.env.PORT;
+const router = express.Router();
+const server = express();
+
+//headers setups
+server.use((req, res, next) => {
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+    res.header('Access-Control-Allow-Credentials', true);
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    next();
+});
 
 //CORS
 server.use(cors("*"))
+
+// import {router as employersRoutes} from "./server/api/routes/employers.routes.js"
 
 //Midlewares
 server.use(express.json());
 server.use(express.urlencoded({ extended: true }))
 
-
 //ROUTES
-server.use("/employers", employersRoutes)
+router.get('/', (req, res) => {
+    res.send('Hola de nuevo desde mongo')
+});
 
+server.use('/', router);
+server.use("/employers", employersRoutes);
+
+//ERROR CONTROL
+server.use('*', (req, res, next) => {
+    const error = new Error('Route not found');
+    error.status = 404;
+    next(error);
+});
+
+server.use((err, req, res, next) => {
+    return res.status(err.status || 500).json(err.message || 'Unexpected error');
+});
+
+//SERVER LISTEN
 server.listen(PORT, () => {
     console.log(`Node server listening on port http:${PORT}`)
 })

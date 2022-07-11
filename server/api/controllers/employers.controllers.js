@@ -5,16 +5,15 @@ import { httpStatusCode } from "../../utils/seeds/httpStatusCode.js"
 const getAllEmployers = async (req, res, next) => {
     try {
         const employers = await Employers.find();
+        return res.status(200).json(employers);
         return res.json({
-            status: 200,
-            message: httpStatusCode[200],
-            data: employers,
-
+          //  status : 200,
+          //  message : httpStatusCode[200],
+           data : { employers: employers },
         });
-
+        res.send(employers);
     } catch (error) {
-
-        return next(error);
+        return next(error)
     }
 };
 

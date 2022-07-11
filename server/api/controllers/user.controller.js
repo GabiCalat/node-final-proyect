@@ -103,8 +103,6 @@ const loginUser = async (req, res, next)=>{
           console.log(error);
           return next(error);
         }
-
-
 };
 
 

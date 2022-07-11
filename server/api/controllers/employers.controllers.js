@@ -1,10 +1,10 @@
-import { Employer } from "../models/employers.models.js"
+import { Employers } from "../models/employers.models.js"
 import { httpStatusCode } from "../../utils/seeds/httpStatusCode.js"
 
 //get all employers
 const getAllEmployers = async (req, res, next) => {
     try {
-        const employers = await Employer.find();
+        const employers = await Employers.find();
         return res.json({
             status: 200,
             message: httpStatusCode[200],
@@ -27,7 +27,7 @@ const getAllEmployersById = async (req, res, next) => {
         const { id } = req.params;
         console.log(id);
 
-        const employerbyid = await Employer.findById(id);
+        const employerbyid = await Employers.findById(id);
         return res.json({
             status: 200,
             message: httpStatusCode[200],
@@ -40,25 +40,35 @@ const getAllEmployersById = async (req, res, next) => {
     }
 };
 
-/**
- * POST
- * Create employer
- * 
- * 
- */
+const getEmployersByDni = async(req,res,next) => {
+    const {dni} = req.params;
+    //console.log(name);
+    try {
+      const employerByDni = await Employers.find({dni: dni});
+      return res.json({
+        // status: 200,
+        // message: httpStatusCode[200],
+        data: {employer: employerByDni}
+      })
+    } catch (error) {
+      next(error)
+    }
+}
+
+
 const createEmployer = async (req, res, next) => {
 
     const { body } = req;
 
     try {
 
-        const newEmployer = new Employer({
+        const newEmployer = new Employers({
             name: body.name,
             surname: body.surname,
             email: body.email,
             job: body.job,
             age: body.age,
-            number: body.number,
+            dni: body.dni,
         });
 
         const savedEmployer = await newEmployer.save();
@@ -72,20 +82,6 @@ const createEmployer = async (req, res, next) => {
         return next(error);
 
     }
-
-    /*     try {
-    
-            const newEmployer = new Employer(req.body);
-    
-            const newEmployerDB = await newEmployer.save();
-            return res.json({
-                status: 201,
-                message: httpStatusCode[201],
-                data: { employer: newEmployerDB },
-            });
-        } catch (error) {
-            return next(error);
-        } */
 };
 
-export { getAllEmployers, getAllEmployersById, createEmployer };
+export { getAllEmployers, getAllEmployersById, createEmployer, getEmployersByDni };

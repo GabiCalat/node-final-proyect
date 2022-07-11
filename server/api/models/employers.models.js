@@ -9,13 +9,13 @@ const Employerschema = new Schema(
         email: { type: String, required: true },
         job: { type: String, required: true },
         age: { type: Number, required: true },
-        number: { type: Number, required: true }
+        dni: { type: String, required: true }
     },
     {
         timestamps: true
     }
 );
 
-const Employer = mongoose.model("employer", Employerschema);
+const Employers = mongoose.model("employers", Employerschema);
 
-export { Employer };
+export { Employers };

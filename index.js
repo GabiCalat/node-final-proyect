@@ -4,12 +4,16 @@ import 'dotenv/config';
 import { connection } from "./server/config/database.js"
 import cors from "cors";
 import { employersRoutes } from "./server/api/routes/employers.routes.js";
+import { companiesRoutes } from "./server/api/routes/companies.routes.js";
+import { userRoutes } from "./server/api/routes/user.routes.js";
 
 connection();
 
 const PORT = process.env.PORT;
 const router = express.Router();
 const server = express();
+
+server.set("secretKey", "nodeRestApi"); 
 
 //headers setups
 server.use((req, res, next) => {
@@ -19,22 +23,22 @@ server.use((req, res, next) => {
     next();
 });
 
-//CORS
-server.use(cors("*"))
-
-// import {router as employersRoutes} from "./server/api/routes/employers.routes.js"
 
 //Midlewares
 server.use(express.json());
-server.use(express.urlencoded({ extended: true }))
+server.use(express.urlencoded({ extended: true }));
+//CORS
+server.use(cors("*"));
 
 //ROUTES
-router.get('/', (req, res) => {
-    res.send('Hola de nuevo desde mongo')
-});
+// router.get('/', (req, res) => {
+//     res.send('Hola de nuevo desde mongo')
+// });
 
-server.use('/', router);
+//server.use('/', router);
 server.use("/employers", employersRoutes);
+server.use("/companies", companiesRoutes);
+server.use("/users", userRoutes);
 
 //ERROR CONTROL
 server.use('*', (req, res, next) => {

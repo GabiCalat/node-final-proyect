@@ -26,15 +26,15 @@ import { httpStatusCode } from "../../utils/seeds/httpStatusCode.js"
             console.log(id);
     
             const companiebyid = await Companies.findById(id);
+            return res.status(200).json(companiebyid);
             return res.json({
-                status: 200,
-                message: httpStatusCode[200],
-                data: { conpanies: companiebyid }
+              //  status : 200,
+              //  message : httpStatusCode[200],
+               data : { companies: companiebyid },
             });
-    
+            res.send(companiebyid);
         } catch (error) {
-    
-            return next(error);
+            return next(error)
         }
     };
 

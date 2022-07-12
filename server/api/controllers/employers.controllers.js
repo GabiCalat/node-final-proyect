@@ -27,16 +27,16 @@ const getAllEmployersById = async (req, res, next) => {
         console.log(id);
 
         const employerbyid = await Employers.findById(id);
-        return res.json({
-            status: 200,
-            message: httpStatusCode[200],
-            data: { employers: employerbyid }
-        });
-
-    } catch (error) {
-
-        return next(error);
-    }
+        return res.status(200).json(employerbyid);
+            return res.json({
+              //  status : 200,
+              //  message : httpStatusCode[200],
+               data : { employers: employerbyid },
+            });
+            res.send(employerbyid);
+        } catch (error) {
+            return next(error)
+        }
 };
 
 const getEmployersByDni = async(req,res,next) => {

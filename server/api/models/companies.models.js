@@ -10,7 +10,6 @@ const CompaniesSchema = new Schema(
         companie: { type: String, required: true },
         cif: { type: String, required: true },
         logo: { type: String, required: true },
-       
 
     });
 

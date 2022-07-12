@@ -3,9 +3,12 @@ import 'dotenv/config';
 
 import { connection } from "./server/config/database.js"
 import cors from "cors";
+
+//ROUTES
 import { employersRoutes } from "./server/api/routes/employers.routes.js";
 import { companiesRoutes } from "./server/api/routes/companies.routes.js";
 import { userRoutes } from "./server/api/routes/user.routes.js";
+import { messagesRoutes } from "./server/api/routes/messages.routes.js";
 
 connection();
 
@@ -31,14 +34,15 @@ server.use(express.urlencoded({ extended: true }));
 server.use(cors("*"));
 
 //ROUTES
-// router.get('/', (req, res) => {
-//     res.send('Hola de nuevo desde mongo')
-// });
+router.get('/', (req, res) => {
+    res.send('Server running OK')
+});
 
-//server.use('/', router);
+server.use('/', router);
 server.use("/employers", employersRoutes);
 server.use("/companies", companiesRoutes);
 server.use("/users", userRoutes);
+server.use("/messages", messagesRoutes);
 
 //ERROR CONTROL
 server.use('*', (req, res, next) => {

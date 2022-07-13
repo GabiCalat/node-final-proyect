@@ -4,24 +4,26 @@ import jwt from "jsonwebtoken";
 import { httpStatusCode } from "../../utils/seeds/httpStatusCode.js"
 
 
-const getUsers = async (req,res,next) =>{
+const getUsers = async (req, res, next) => {
+
   try {
-      const users = await User.find();
-      return res.json({
-         status :200,
-         message : httpStatusCode[200],
-         data : { users: users},
-      });
+    const users = await User.find();
+    return res.json({
+      status: 200,
+      message: httpStatusCode[200],
+      data: { users: users },
+    });
   } catch (error) {
-      return next(error)        
+    return next(error)
   }
 };
 
+//--------------REGISTER USER
+const registerUser = async (req, res, next) => {
 
-const  registerUser = async(req, res, next) =>{
   try {
     const { body } = req;
-    console.log('Entro',body);
+
     // Comprobar usuario
     const previousUser = await User.findOne({ email: body.email });
 
@@ -54,57 +56,69 @@ const  registerUser = async(req, res, next) =>{
   }
 };
 
-const loginUser = async (req, res, next)=>{
- 
+//--------------LOGIN USER 
+const loginUser = async (req, res, next) => {
+
   try {
-          const { body } = req;
-          //console.log('Entro', body.email);
-      
-          // Comprobar email
-          const user = await User.findOne({ email: body.email });
-      
-          // Comprobar password
-          const isValidPassword = await bcrypt.compare(body.password, user?.password ?? '');
-          // Control de LOGIN
-          if (!user || !isValidPassword) {
-            const error = {
-              status: 401,
-              message: 'The email & password combination is incorrect!'
-            };
-            return next(error);
-          }
-      
-          // TOKEN JWT
-          
-          const token = jwt.sign(
-            
-            {
-              id: user._id,
-              email: user.email,
-              rol: 'ADMIN'
-            },
-            req.app.get("secretKey"),
-            { expiresIn: "1h" }
-          );
-          console.log('Llego');
-          // Response
-          return res.json({
-            status: 200,
-            message: httpStatusCode[200],
-            user: {
-              user: user._id,
-              email: user.email,
-              token: token
-            },
-           
-          });
-           console.log(user);
-        } catch (error) {
-          console.log(error);
-          return next(error);
-        }
+    const { body } = req;
+
+    // Comprobar email
+    const user = await User.findOne({ email: body.email });
+
+    // Comprobar password
+    const isValidPassword = await bcrypt.compare(body.password, user?.password ?? '');
+    // Control de LOGIN
+    if (!user || !isValidPassword) {
+      const error = {
+        status: 401,
+        message: 'The email & password combination is incorrect!'
+      };
+      return next(error);
+    }
+
+    // TOKEN JWT
+    const token = jwt.sign(
+      {
+        id: user._id,
+        email: user.email,
+        rol: 'ADMIN'
+      },
+      req.app.get("secretKey"),
+      { expiresIn: "1h" }
+    );
+
+    // Response
+    return res.json({
+      status: 200,
+      message: httpStatusCode[200],
+      data: {
+        user: user._id,
+        email: user.email,
+        token: token
+      },
+
+    });
+
+  } catch (error) {
+    return next(error);
+  }
+};
+
+//logOut
+const logoutUser = async (req, res, next) => {
+
+  try {
+    req.authority = null;
+    return res.json({
+      status: 200,
+      message: 'logged out',
+      token: null
+    })
+  } catch (error) {
+    next(error)
+  }
+
 };
 
 
-
-  export { registerUser, getUsers, loginUser };
+export { registerUser, getUsers, loginUser, logoutUser };

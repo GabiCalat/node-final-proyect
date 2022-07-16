@@ -3,8 +3,9 @@ import { httpStatusCode } from "../../utils/seeds/httpStatusCode.js"
 
 
 const getAllJobs = async (req, res, next) => {
+
     try {
-        const jobs = await Job.find();
+        const jobs = await Job.find().populate('id_company');
         // return res.status(200).json(jobs);
         return res.json({
             status: 200,
@@ -24,7 +25,6 @@ const getJobById = async (req, res, next) => {
 
         const { id } = req.params;
 
-
         const jobbyid = await Job.findById(id);
         // return res.status(200).json(companiebyid);
         return res.json({
@@ -38,21 +38,24 @@ const getJobById = async (req, res, next) => {
     }
 };
 
+//----------------------------CREATE JOB
 const createJob = async (req, res, next) => {
 
     const { body } = req;
 
     try {
 
-        const newJob = new Companies({
+        const newJob = new Job({
             name: body.name,
             id_company: body.id_company,
-            name_company: body.name_company,
-            candidate_list: body.candidate_list,
+            // name_company: body.name_company,
+            // candidate_list: body.candidate_list,
             salary: body.salary,
-            description: body, description,
-            location: body.location,
-            requiremets: body, requiremets
+            description: body.description,
+            // location: body.location,
+            requiremets: body.requiremets,
+            candidate_list: []
+
         });
 
         const savedJob = await newJob.save();
@@ -104,4 +107,4 @@ const createJob = async (req, res, next) => {
 // };
 
 
-export { getAllJobs, getJobById, createJob};
+export { getAllJobs, getJobById, createJob };

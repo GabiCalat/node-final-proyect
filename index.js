@@ -9,6 +9,7 @@ import cors from "cors";
 import { companiesRoutes } from "./server/api/routes/companies.routes.js";
 import { userRoutes } from "./server/api/routes/user.routes.js";
 import { messagesRoutes } from "./server/api/routes/messages.routes.js";
+import { jobRoutes } from "./server/api/routes/jobs.routes.js";
 
 connection();
 
@@ -43,6 +44,7 @@ server.use('/', router);
 server.use("/companies", companiesRoutes);
 server.use("/users", userRoutes);
 server.use("/messages", messagesRoutes);
+server.use("/jobs", jobRoutes);
 
 //ERROR CONTROL
 server.use('*', (req, res, next) => {

@@ -4,18 +4,22 @@ const Schema = mongoose.Schema;
 
 const JobSchema = new Schema(
     {
-        id_companie: { type: String, required: true },
-        name_companie: { type: String, required: true },
+        name:{ type: String, required: true },
+        id_company: { type: mongoose.Types.ObjectId, ref: 'Companies', required: true },
+        name_company: { type: mongoose.Types.ObjectId,ref: 'User', required: true },
         candidate_list: { type: String, required: true },
-        salary: { type: String, required: true },
-        age: { type: Number, required: true },
-        dni: { type: String, required: true }
+        salary: { type: Number, required: true },
+        description:{ type: String, required: true },
+        location:{type:String,required:true},
+        requiremets:{type:String,required:true},
+        //age: { type: Number,},
+        
     },
     {
         timestamps: true
     }
 );
 
-const Employers = mongoose.model("employers", Employerschema);
+const Job = mongoose.model("Jobs",JobSchema);
 
-export { Employers };
+export { Job };

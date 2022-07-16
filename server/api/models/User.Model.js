@@ -3,11 +3,15 @@ const Schema = mongoose.Schema;
 
 const userSchema = new Schema(
   {
-    name: { type: String, required: true },
-    surname: { type: String, required: true },
+    name: { type: String, required: false },
+    surname: { type: String, required: false },
     email: { type: String, required: true },
-    job: { type: String, required: true },
-    age: { type: Number, required: true },
+    password:{type:String,required:true},
+    education: { type: String},
+    age: { type: Number, required: false },
+    description:{type:String,required:false},
+    habilities:{type:String},
+    jobs:{type: mongoose.Types.ObjectId, ref: 'companies', required: false }
   },
   {
     timestamps: true,

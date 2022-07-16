@@ -11,7 +11,6 @@ userRoutes.get('/', [isAuth] , getAllUsers);
 userRoutes.post('/', registerUser);
 userRoutes.post('/login', loginUser);
 userRoutes.post('/logout', logoutUser);
-userRoutes.get("/", getAllUsers);
 userRoutes.get("/:id", getUserById);
 //userRoutes.post("/", createUser);
 //userRoutes.get("/dni/:dni", getUsersByDni);

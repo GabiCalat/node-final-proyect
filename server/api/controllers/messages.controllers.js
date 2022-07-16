@@ -6,7 +6,7 @@ const addMsg = async (req, res, next) => {
 
     try {
         const newMessage = await Message.create({
-            message: { text: message },
+            message: {text: message},
             users: [from, to],
             sender: from
         })
@@ -15,7 +15,6 @@ const addMsg = async (req, res, next) => {
     } catch (error) {
         return next(error);
     }
-
 
 }
 

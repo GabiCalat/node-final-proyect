@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import { httpStatusCode } from "../../utils/seeds/httpStatusCode.js"
 
 
-const getUsers = async (req, res, next) => {
+const getAllUsers = async (req, res, next) => {
 
   try {
     const users = await User.find();
@@ -120,5 +120,31 @@ const logoutUser = async (req, res, next) => {
 
 };
 
+const getUserById = async (req, res, next) => {
 
-export { registerUser, getUsers, loginUser, logoutUser };
+  try {
+
+      const { id } = req.params;
+      console.log(id);
+
+      const userbyid = await Employers.findById(id);
+      return res.status(200).json(userbyid);
+          return res.json({
+            //  status : 200,
+            //  message : httpStatusCode[200],
+             data : { user: userbyid },
+          });
+          res.send(userbyid);
+      } catch (error) {
+          return next(error)
+      }
+};
+
+
+
+
+
+
+
+
+export { registerUser, getAllUsers, loginUser, logoutUser, getUserById };

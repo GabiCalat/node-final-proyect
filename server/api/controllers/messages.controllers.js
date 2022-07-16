@@ -6,7 +6,7 @@ const addMsg = async (req, res, next) => {
 
     try {
         const newMessage = await Message.create({
-            message: message,
+            message: {text: message},
             users: [from, to],
             sender: from
         })
@@ -15,7 +15,6 @@ const addMsg = async (req, res, next) => {
     } catch (error) {
         return next(error);
     }
-
 
 }
 
@@ -31,7 +30,7 @@ const getAllMsg = async (req, res, next) => {
         const mappedMessages = messages.map((message) => {
             return {
                 fromSelf: message.sender.toString() === from,
-                messageText: message.message
+                messageText: message.message.text
             }
         })
 

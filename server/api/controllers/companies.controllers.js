@@ -7,11 +7,11 @@ const getAllCompanies = async (req, res, next) => {
     const companies = await Companies.find();
     //return res.status(200).json(companies);
     return res.json({
-        status : 200,
-        message : httpStatusCode[200],
+      status: 200,
+      message: httpStatusCode[200],
       data: { companies: companies },
     });
-   // res.send(companies);
+    // res.send(companies);
   } catch (error) {
     return next(error)
   }
@@ -28,8 +28,8 @@ const getCompanyById = async (req, res, next) => {
     const companybyid = await Companies.findById(id);
     //return res.status(200).json(companiebyid);
     return res.json({
-       status : 200,
-       message : httpStatusCode[200],
+      status: 200,
+      message: httpStatusCode[200],
       data: { company: companybyid },
     });
     //res.send(companiebyid);
@@ -40,7 +40,7 @@ const getCompanyById = async (req, res, next) => {
 
 
 //-------------------CREATE COMPANY
-const createCompanie = async (req, res, next) => {
+const createCompany = async (req, res, next) => {
 
   const { body } = req;
 
@@ -50,16 +50,15 @@ const createCompanie = async (req, res, next) => {
       name_job: body.name_job,
       company: body.company,
       email: body.email,
-      cif: body.cif,
       logo: body.logo,
     });
 
-    const savedCompanie = await newCompanie.save();
+    const savedCompany = await newCompanie.save();
 
     return res.json({
       status: 201,
       message: 'Companie Registered successfully',
-      data: savedCompanie
+      data: savedCompany
     });
   } catch (error) {
     return next(error);
@@ -103,4 +102,4 @@ const editNamejob = async (req, res, next) => {
 };
 
 
-export { getAllCompanies, getCompanyById, createCompanie, findCompanieByName, editNamejob };
+export { getAllCompanies, getCompanyById, createCompany, findCompanieByName, editNamejob };

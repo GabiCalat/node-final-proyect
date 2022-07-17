@@ -12,7 +12,7 @@ const userRoutes = express.Router();
 userRoutes.get('/', [isAuth] , getAllUsers);
 userRoutes.post('/', registerUser);
 userRoutes.post('/login', loginUser);
-userRoutes.put('/edit', [upload.single('image'), uploadToCloudinary], editUser);
+userRoutes.put('/edit/:id', [upload.single('image'), uploadToCloudinary], editUser);
 userRoutes.post('/logout', logoutUser);
 userRoutes.get("/:id", getUserById);
 //userRoutes.post("/add-photo", [upload.single('image'), uploadToCloudinary], createPhotoUserFile);

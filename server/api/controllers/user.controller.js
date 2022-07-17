@@ -146,12 +146,14 @@ const editUser = async ( req, res, next) => {
 
   try {
       const userPhoto = req.file_url;
+      //const result=req.params;
+      const { user_id} = req.params;
+      //console.log(user_id);
       
-      console.log(req.body,userPhoto);
       const userPut = new User(
           
+        //
           
-         
 
 
           req.body
@@ -168,8 +170,10 @@ const editUser = async ( req, res, next) => {
           // email: req.body.email,
           // image: userPhoto
       );
-      await User.findByIdAndUpdate(req.body._id, userPut)
-
+      console.log(userPut);
+       //userPut._id = user_id;
+      await User.findByIdAndUpdate(user_id, userPut)
+     
       // const createdUser = await userPut.save();
       return res.status(201).json(userPut);
   } catch (error) {

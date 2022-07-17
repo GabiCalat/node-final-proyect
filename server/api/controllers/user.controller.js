@@ -37,6 +37,8 @@ const registerUser = async (req, res, next) => {
 
     // Crear usuario en DB
     const newUser = new User({
+      name: body.name,
+      surname: body.surname,
       email: body.email,
       password: pwdHash,
     });
@@ -140,28 +142,36 @@ const getUserById = async (req, res, next) => {
       }
 };
 
-const createPhotoUserFile = async ( req, res, next) => {
+const editUser = async ( req, res, next) => {
 
   try {
       const userPhoto = req.file_url;
       
-      const newUser = new User({
-          name: req.body.name,
-          surname: req.body.surname,
-          email: req.body.email,
-          password: req.body.password,
-          education: req.body.education,
-          age: req.body.age,
-          description: req.body.description,
-          habilities: req.body.habilities,
+      console.log(req.body,userPhoto);
+      const userPut = new User(
+          
+          
+         
+
+
+          req.body
+          // name: req.body.name,
+          // surname: req.body.surname,
+          // email: req.body.email,
+          // password: req.body.password,
+          // education: req.body.education,
+          // age: req.body.age,
+          // description: req.body.description,
+          // habilities: req.body.habilities,
           
 
-          email: req.body.email,
-          image: userPhoto
-      });
-      
-      const createdUser = await newUser.save();
-      return res.status(201).json(createdUser);
+          // email: req.body.email,
+          // image: userPhoto
+      );
+      await User.findByIdAndUpdate(req.body._id, userPut)
+
+      // const createdUser = await userPut.save();
+      return res.status(201).json(userPut);
   } catch (error) {
       
       next(error);
@@ -175,4 +185,4 @@ const createPhotoUserFile = async ( req, res, next) => {
 
 
 
-export { registerUser, getAllUsers, loginUser, logoutUser, getUserById, createPhotoUserFile };
+export { registerUser, getAllUsers, loginUser, logoutUser, getUserById, editUser };

@@ -6,6 +6,7 @@ import fs from 'fs';
 import cloudinary from 'cloudinary';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
 const VALID_FILE_TYPES = ['image/png', 'image/jpg', 'image/jpeg'];
 
 

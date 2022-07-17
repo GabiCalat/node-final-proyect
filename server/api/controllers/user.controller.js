@@ -143,9 +143,12 @@ const getUserById = async (req, res, next) => {
 
 const editUser = async (req, res, next) => {
 
+  const { id: user_id } = req.authority;
+
+  const bodyData = req.body;
+  const userPhoto = req.file_url;
   try {
-    // const userPhoto = req.file_url;
-    const { user_id } = req.params;
+    // const { user_id } = req.params;
 
     const userPut = new User(req.body);
 
@@ -164,22 +167,20 @@ const editUser = async (req, res, next) => {
 
 const addNewContact = ('/', async (req, res, next) => {
 
-  const { id: userId} = req.authority;
+  const { id: userId } = req.authority;
   const { contactId } = req.body;
 
   try {
 
-/*      const selectedUser = await User.findById(userId)
+    /*      const selectedUser = await User.findById(userId)
+       const findContact = selectedUser.contacts.filter(contact => {
+          return contact.toString() === contactId.toString()
+        })
+        if (!findContact) {
+          return res.status(200).json('el usuario que tratas de agregar ya está en tu lista');
+        } */
 
-   const findContact = selectedUser.contacts.filter(contact => {
-      return contact.toString() === contactId.toString()
-    })
-
-    if (!findContact) {
-      return res.status(200).json('el usuario que tratas de agregar ya está en tu lista');
-    } */
-
-    const updatedUser = await User.updateOne(
+    await User.updateOne(
       { _id: userId },
       { $push: { contacts: contactId } },
       { new: true }

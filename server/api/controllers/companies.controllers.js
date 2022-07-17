@@ -5,34 +5,34 @@ import { httpStatusCode } from "../../utils/seeds/httpStatusCode.js"
 const getAllCompanies = async (req, res, next) => {
   try {
     const companies = await Companies.find();
-    return res.status(200).json(companies);
+    //return res.status(200).json(companies);
     return res.json({
-      //  status : 200,
-      //  message : httpStatusCode[200],
+        status : 200,
+        message : httpStatusCode[200],
       data: { companies: companies },
     });
-    res.send(companies);
+   // res.send(companies);
   } catch (error) {
     return next(error)
   }
 };
 
 
-const getAllCompaniesById = async (req, res, next) => {
+const getCompanyById = async (req, res, next) => {
 
   try {
 
     const { id } = req.params;
     console.log(id);
 
-    const companiebyid = await Companies.findById(id);
-    return res.status(200).json(companiebyid);
+    const companybyid = await Companies.findById(id);
+    //return res.status(200).json(companiebyid);
     return res.json({
-      //  status : 200,
-      //  message : httpStatusCode[200],
-      data: { companies: companiebyid },
+       status : 200,
+       message : httpStatusCode[200],
+      data: { company: companybyid },
     });
-    res.send(companiebyid);
+    //res.send(companiebyid);
   } catch (error) {
     return next(error)
   }
@@ -103,4 +103,4 @@ const editNamejob = async (req, res, next) => {
 };
 
 
-export { getAllCompanies, getAllCompaniesById, createCompanie, findCompanieByName, editNamejob };
+export { getAllCompanies, getCompanyById, createCompanie, findCompanieByName, editNamejob };

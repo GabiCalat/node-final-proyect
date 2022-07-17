@@ -5,13 +5,15 @@ const userSchema = new Schema(
   {
     name: { type: String, required: false },
     surname: { type: String, required: false },
-    email: { type: String, required: true },
-    password:{type:String,required:true},
+    email: { type: String, required: false },
+    password:{type:String,required:false},
     education: { type: String},
     age: { type: Number, required: false },
     description:{type:String,required:false},
     habilities:{type:String},
-    jobs:{type: mongoose.Types.ObjectId, ref: 'companies', required: false }
+    image: { type: String, required: false },// prueba
+    jobs:{type: mongoose.Types.ObjectId, ref: 'companies', required: false },
+    
   },
   {
     timestamps: true,

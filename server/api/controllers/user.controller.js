@@ -1,4 +1,4 @@
-import { User } from "../models/user.Model.js";
+import { User } from "../models/user.model.js";
 import bcrypt from 'bcrypt';
 import jwt from "jsonwebtoken";
 import { httpStatusCode } from "../../utils/seeds/httpStatusCode.js"

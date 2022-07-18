@@ -2,11 +2,12 @@ import { Message } from "../models/message.model.js";
 
 const addMsg = async (req, res, next) => {
 
-    const { from, to, message } = req.body;
+    const { to, message } = req.body;
+    const { id: from } = req.authority;
 
     try {
         const newMessage = await Message.create({
-            message: {text: message},
+            message: message,
             users: [from, to],
             sender: from
         })
@@ -20,7 +21,8 @@ const addMsg = async (req, res, next) => {
 
 const getAllMsg = async (req, res, next) => {
 
-    const { from, to } = req.body;
+    const { to } = req.body;
+    const { id: from } = req.authority;
 
     try {
         const messages = await Message.find({
@@ -30,7 +32,7 @@ const getAllMsg = async (req, res, next) => {
         const mappedMessages = messages.map((message) => {
             return {
                 fromSelf: message.sender.toString() === from,
-                messageText: message.message.text
+                messageText: message.message
             }
         })
 

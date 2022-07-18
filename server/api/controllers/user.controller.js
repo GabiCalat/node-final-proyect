@@ -9,11 +9,6 @@ const getAllUsers = async (req, res, next) => {
   try {
     const users = await User.find().populate('contacts', 'name');
     return res.status(200).json(users);
-    // return res.json({
-    //   // status: 200,
-    //   // message: httpStatusCode[200],
-    //   data: { users: users },
-    // });
   } catch (error) {
     return next(error)
   }
@@ -110,7 +105,7 @@ const loginUser = async (req, res, next) => {
   }
 };
 
-//----------------######logOut
+//----------------######LOGOUT
 const logoutUser = async (req, res, next) => {
 
   try {
@@ -126,6 +121,7 @@ const logoutUser = async (req, res, next) => {
 
 };
 
+//----------------------GET USER BY ID
 const getUserById = async (req, res, next) => {
 
 
@@ -145,59 +141,22 @@ const getUserById = async (req, res, next) => {
   }
 };
 
-// const editUser = async (req, res, next) => {
-
-//   //const { id: user_id } = req.authority;
-//   console.log('Entro');
-//   console.log(req.body);
-//   const bodyData = req.body;
-//   //const userPhoto = req.file_url;
-//   try {
-//     // const { user_id } = req.params;
-
-//     const userPut = new User(req.body);
-
-//     userPut._id = user_id;
-
-//     await User.findByIdAndUpdate(user_id, userPut)
-
-//     return res.status(201).json(userPut);
-//   } catch (error) {
-
-//     next(error);
-//   }
-// };
-
-
-//Oscar , pendiente de verificar with the four magnificent 18/07/2022
-
-
-//----------------------#####--edit user
+//-------------------------EDIT USER
 const editUser = async (req, res, next) => {
 
   const userPhoto = req.file_url;// me traigo la url de la foto
+  const bodyData = req.body;
+  //revisamos si nos llega una imagen por el body
+  if (userPhoto) { bodyData.image = userPhoto }
   const { id: userId } = req.authority;
-  // const requestedData = req.body;
-  //console.log( userPhoto);
+
   try {
-
     // creamos el objeto con los campos que vamos a modificar
-    const userModify = new User({
-
-      name: req.body.name,
-      surname: req.body.surname,
-      email: req.body.email,
-      password: req.body.password,
-      image: userPhoto
-
-    });
+    const userModify = new User(bodyData);
     //Para evitar que se modifique el id de mongo:
     userModify._id = userId;
     //buscamos por el id y le pasamos los campos a modificar
-    await User.findByIdAndUpdate(
-      userId,
-      userModify
-    );
+    await User.findByIdAndUpdate(userId, userModify);
 
     //retornamos respuesta de  los datos del objeto creado 
     return res.json({
@@ -210,7 +169,7 @@ const editUser = async (req, res, next) => {
   }
 };
 
-//----------------------------APPLY TO A JOB
+//----------------------------ADD A NEW CONTACT
 
 const addNewContact = ('/', async (req, res, next) => {
 
@@ -219,13 +178,12 @@ const addNewContact = ('/', async (req, res, next) => {
 
   try {
 
-    /*      const selectedUser = await User.findById(userId)
-       const findContact = selectedUser.contacts.filter(contact => {
-          return contact.toString() === contactId.toString()
-        })
-        if (!findContact) {
-          return res.status(200).json('el usuario que tratas de agregar ya está en tu lista');
-        } */
+    const user = await User.findById(userId).select({ contacts: 1, _id: 0 })
+
+    if (user.contacts.indexOf(contactId) === 0) {
+      const error = new Error('the user you are trying to add is already in your contacts list');
+      return next(error);
+    }
 
     await User.updateOne(
       { _id: userId },
@@ -233,7 +191,7 @@ const addNewContact = ('/', async (req, res, next) => {
       { new: true }
     );
 
-    return res.status(200).json("contact added correctly");
+    return res.status(200).json(`the contact ${contactId} was added correctly`);
 
   } catch (error) {
     next(error)

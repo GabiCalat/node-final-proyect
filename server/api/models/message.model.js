@@ -4,12 +4,8 @@ const Schema = mongoose.Schema;
 
 const messageSchema = new Schema(
     {
-        message: {
-            text: {
-                type: String, required: true
-            }
-        },
-        users: Array,
+        message: { type: String, required: true },
+        users: { type: Array, required: true },
         sender: { type: mongoose.Types.ObjectId, ref: 'User', required: true }
     },
     {

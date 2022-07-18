@@ -16,7 +16,7 @@ userRoutes.post('/login', loginUser);
 userRoutes.post('/logout', logoutUser);
 
 userRoutes.put('/addContact', [isAuth, upload.single('image'), uploadToCloudinary], addNewContact);
-userRoutes.put('/edit/:userId',[ upload.single('image'), uploadToCloudinary], editUser);
+userRoutes.put('/edit', [isAuth, upload.single('image'), uploadToCloudinary], editUser);
 
 // userRoutes.put('/edit/:user_id', [isAuth, upload.single('image'), uploadToCloudinary], editUser);
 // userRoutes.put('/edit/:user_id', [upload.single('image'), uploadToCloudinary], editUser);

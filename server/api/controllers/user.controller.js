@@ -22,7 +22,7 @@ const getAllUsers = async (req, res, next) => {
 //--------------REGISTER USER
 const registerUser = async (req, res, next) => {
 
-  
+
 
   try {
     const { body } = req;
@@ -110,7 +110,7 @@ const loginUser = async (req, res, next) => {
   }
 };
 
-//logOut
+//----------------######logOut
 const logoutUser = async (req, res, next) => {
 
   try {
@@ -128,9 +128,10 @@ const logoutUser = async (req, res, next) => {
 
 const getUserById = async (req, res, next) => {
 
+
+  const { id } = req.params;
   try {
 
-    const { id } = req.params;
     console.log(id);
 
     const userbyid = await Employers.findById(id);
@@ -145,7 +146,7 @@ const getUserById = async (req, res, next) => {
 };
 
 // const editUser = async (req, res, next) => {
- 
+
 //   //const { id: user_id } = req.authority;
 //   console.log('Entro');
 //   console.log(req.body);
@@ -170,27 +171,30 @@ const getUserById = async (req, res, next) => {
 
 //Oscar , pendiente de verificar with the four magnificent 18/07/2022
 
+
+//----------------------#####--edit user
 const editUser = async (req, res, next) => {
 
-  const userPhoto = req.file_url;// me traigo la url d ela foto
+  const userPhoto = req.file_url;// me traigo la url de la foto
+  const { id: userId } = req.authority;
+  // const requestedData = req.body;
   //console.log( userPhoto);
   try {
-    const { userId } = req.params; //destructuring del id de los params
-    
+
     // creamos el objeto con los campos que vamos a modificar
     const userModify = new User({
 
-      name:req.body.name,
-      surname:req.body.surname,
-      email:req.body.email,
-      password:req.body.password,
-      image:userPhoto
+      name: req.body.name,
+      surname: req.body.surname,
+      email: req.body.email,
+      password: req.body.password,
+      image: userPhoto
 
     });
     //Para evitar que se modifique el id de mongo:
     userModify._id = userId;
     //buscamos por el id y le pasamos los campos a modificar
-    const userUpdated = await User.findByIdAndUpdate(
+    await User.findByIdAndUpdate(
       userId,
       userModify
     );
@@ -199,14 +203,14 @@ const editUser = async (req, res, next) => {
     return res.json({
       status: 200,
       message: httpStatusCode[200],
-      data: { user: userUpdated },
+      data: { user: userModify },
     });
   } catch (error) {
     return next(error);
   }
 };
 
-//---------------------------------APPLY TO A JOB
+//----------------------------APPLY TO A JOB
 
 const addNewContact = ('/', async (req, res, next) => {
 

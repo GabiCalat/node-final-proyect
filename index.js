@@ -17,7 +17,7 @@ const PORT = process.env.PORT;
 const router = express.Router();
 const server = express();
 
-server.set("secretKey", "nodeRestApi"); 
+server.set("secretKey", "nodeRestApi");
 
 //headers setups
 server.use((req, res, next) => {

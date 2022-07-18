@@ -6,6 +6,7 @@ import fs from 'fs';
 import cloudinary from 'cloudinary';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
 const VALID_FILE_TYPES = ['image/png', 'image/jpg', 'image/jpeg'];
 
 
@@ -45,7 +46,7 @@ const uploadToCloudinary = async (req, res, next) => {
       // Añadimos la propiedad file_url a nuestro Request
       req.file_url = image.secure_url;
       return next();
-    } catch(error) {
+    } catch (error) {
       return next(error)
     }
   } else {

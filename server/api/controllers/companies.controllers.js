@@ -5,13 +5,13 @@ import { httpStatusCode } from "../../utils/seeds/httpStatusCode.js"
 const getAllCompanies = async (req, res, next) => {
   try {
     const companies = await Companies.find();
-    //return res.status(200).json(companies);
-    return res.json({
-      status: 200,
-      message: httpStatusCode[200],
-      data: { companies: companies },
-    });
-    // res.send(companies);
+    return res.status(200).json(companies);
+    // return res.json({
+    //   // status: 200,
+    //   // message: httpStatusCode[200],
+    //   data: { companies: companies },
+    // });
+    //  res.send(companies);
   } catch (error) {
     return next(error)
   }
@@ -25,13 +25,13 @@ const getCompanyById = async (req, res, next) => {
     const { id } = req.params;
     console.log(id);
 
-    const companybyid = await Companies.findById(id);
-    //return res.status(200).json(companiebyid);
-    return res.json({
-      status: 200,
-      message: httpStatusCode[200],
-      data: { company: companybyid },
-    });
+    const companyById = await Companies.findById(id);
+    return res.status(200).json(companyById);
+    // return res.json({
+    //   // status: 200,
+    //   // message: httpStatusCode[200],
+    //   data: { company: companybyid },
+    // });
     //res.send(companiebyid);
   } catch (error) {
     return next(error)

@@ -8,11 +8,12 @@ const getAllUsers = async (req, res, next) => {
 
   try {
     const users = await User.find().populate('contacts', 'name');
-    return res.json({
-      status: 200,
-      message: httpStatusCode[200],
-      data: { users: users },
-    });
+    return res.status(200).json(users);
+    // return res.json({
+    //   // status: 200,
+    //   // message: httpStatusCode[200],
+    //   data: { users: users },
+    // });
   } catch (error) {
     return next(error)
   }
@@ -20,6 +21,8 @@ const getAllUsers = async (req, res, next) => {
 
 //--------------REGISTER USER
 const registerUser = async (req, res, next) => {
+
+  
 
   try {
     const { body } = req;
@@ -141,25 +144,65 @@ const getUserById = async (req, res, next) => {
   }
 };
 
+// const editUser = async (req, res, next) => {
+ 
+//   //const { id: user_id } = req.authority;
+//   console.log('Entro');
+//   console.log(req.body);
+//   const bodyData = req.body;
+//   //const userPhoto = req.file_url;
+//   try {
+//     // const { user_id } = req.params;
+
+//     const userPut = new User(req.body);
+
+//     userPut._id = user_id;
+
+//     await User.findByIdAndUpdate(user_id, userPut)
+
+//     return res.status(201).json(userPut);
+//   } catch (error) {
+
+//     next(error);
+//   }
+// };
+
+
+//Oscar , pendiente de verificar with the four magnificent 18/07/2022
+
 const editUser = async (req, res, next) => {
 
-  const { id: user_id } = req.authority;
-
-  const bodyData = req.body;
-  const userPhoto = req.file_url;
+  const userPhoto = req.file_url;// me traigo la url d ela foto
+  //console.log( userPhoto);
   try {
-    // const { user_id } = req.params;
+    const { userId } = req.params; //destructuring del id de los params
+    
+    // creamos el objeto con los campos que vamos a modificar
+    const userModify = new User({
 
-    const userPut = new User(req.body);
+      name:req.body.name,
+      surname:req.body.surname,
+      email:req.body.email,
+      password:req.body.password,
+      image:userPhoto
 
-    userPut._id = user_id;
+    });
+    //Para evitar que se modifique el id de mongo:
+    userModify._id = userId;
+    //buscamos por el id y le pasamos los campos a modificar
+    const userUpdated = await User.findByIdAndUpdate(
+      userId,
+      userModify
+    );
 
-    await User.findByIdAndUpdate(user_id, userPut)
-
-    return res.status(201).json(userPut);
+    //retornamos respuesta de  los datos del objeto creado 
+    return res.json({
+      status: 200,
+      message: httpStatusCode[200],
+      data: { user: userUpdated },
+    });
   } catch (error) {
-
-    next(error);
+    return next(error);
   }
 };
 

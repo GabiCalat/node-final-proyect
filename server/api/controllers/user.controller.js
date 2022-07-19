@@ -17,8 +17,6 @@ const getAllUsers = async (req, res, next) => {
 //--------------REGISTER USER
 const registerUser = async (req, res, next) => {
 
-
-
   try {
     const { body } = req;
 
@@ -124,17 +122,39 @@ const logoutUser = async (req, res, next) => {
 //----------------------GET USER BY ID
 const getUserById = async (req, res, next) => {
 
-
   const { id } = req.params;
   try {
 
-    console.log(id);
-
-    const userbyid = await Employers.findById(id);
+    const userById = await User.findById(id);
     return res.json({
       status: 200,
       message: httpStatusCode[200],
-      data: { user: userbyid },
+      data: { user: userById },
+    });
+  } catch (error) {
+    return next(error)
+  }
+};
+
+//----------------------GET USER CONTACTS
+const getUserContacts = async (req, res, next) => {
+
+  const { id } = req.authority;
+  try {
+
+    const userById = await User.findById(id)
+      .select({ contacts: 1, _id: 0 }).populate('contacts');
+
+    const userContacts = userById.contacts.map((contact) => ({
+      name: contact.name,
+      surname: contact.surname,
+      id: contact._id
+    }));
+
+    return res.json({
+      status: 200,
+      message: httpStatusCode[200],
+      data: { contacts: userContacts },
     });
   } catch (error) {
     return next(error)
@@ -180,7 +200,7 @@ const addNewContact = ('/', async (req, res, next) => {
 
     const user = await User.findById(userId).select({ contacts: 1, _id: 0 })
 
-    if (user.contacts.indexOf(contactId) === 0) {
+    if (user.contacts.indexOf(contactId) !== -1) {
       const error = new Error('the user you are trying to add is already in your contacts list');
       return next(error);
     }
@@ -198,4 +218,4 @@ const addNewContact = ('/', async (req, res, next) => {
   }
 });
 
-export { registerUser, getAllUsers, loginUser, logoutUser, getUserById, editUser, addNewContact };
+export { registerUser, getUserContacts, getAllUsers, loginUser, logoutUser, getUserById, editUser, addNewContact };

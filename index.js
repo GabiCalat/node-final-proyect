@@ -82,4 +82,5 @@ io.on('connection', (socket) => {
     //     console.log('está en el room');
     //     socket.join(room)
     // })
+    
 });

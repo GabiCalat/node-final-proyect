@@ -137,6 +137,41 @@ const getUserById = async (req, res, next) => {
     return next(error)
   }
 };
+//----------------------GET USER CONTACTS
+
+const getUserContacts = async (req, res, next) => {
+
+  const { id } = req.authority;
+
+  try {
+
+    const userById = await User.findById(id)
+
+      .select({ contacts: 1, _id: 0 }).populate('contacts');
+    const userContacts = userById.contacts.map((contact) => ({
+
+      name: contact.name,
+      surname: contact.surname,
+      id: contact._id
+
+    }));
+    return res.json({
+
+      status: 200,
+
+      message: httpStatusCode[200],
+
+      data: { contacts: userContacts },
+
+    });
+
+  } catch (error) {
+
+    return next(error)
+
+  }
+
+};
 
 //-------------------------EDIT USER
 const editUser = async (req, res, next) => {
@@ -196,4 +231,4 @@ const addNewContact = ('/', async (req, res, next) => {
   }
 });
 
-export { registerUser, getAllUsers, loginUser, logoutUser, getUserById, editUser, addNewContact };
+export { registerUser, getAllUsers, loginUser, logoutUser, getUserById, editUser, addNewContact,getUserContacts };

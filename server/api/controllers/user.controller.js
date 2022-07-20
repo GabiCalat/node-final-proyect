@@ -128,8 +128,6 @@ const getUserById = async (req, res, next) => {
   const { id } = req.params;
   try {
 
-    console.log(id);
-
     const userbyid = await User.findById(id);
     return res.status(200).json(userbyid);
 

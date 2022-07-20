@@ -48,14 +48,10 @@ const createJob = async (req, res, next) => {
         const newJob = new Job({
             name: body.name,
             id_company: body.id_company,
-            // name_company: body.name_company,
-            // candidate_list: body.candidate_list,
             salary: body.salary,
             description: body.description,
-            // location: body.location,
             requiremets: body.requiremets,
             candidate_list: []
-
         });
 
         const savedJob = await newJob.save();
@@ -76,25 +72,33 @@ const createJob = async (req, res, next) => {
 const addUserToJob = async (req, res, next) => {
 
     try {
-        const { _id } = req.body;
-        const { userId } = req.body;
-        //console.log(_id,userId,5);
-        const updatedJob = await Job.findByIdAndUpdate(
-            _id,
+        const { _id: jobId } = req.body;
+        const { id: userId } = req.authority;
+
+
+        const findJob = await Job.findById(jobId)
+        //controlar que no se pueda agregar el mismo usuario dos veces
+        if (findJob.candidate_list.indexOf(userId) !== -1) {
+            const error = new Error('the user you are trying to has already applied to this job');
+            return next(error);
+        }
+
+        await Job.updateOne(
+            { _id: jobId },
             { $push: { candidate_list: userId } },
             { new: true }
         );
-        return res.status(200).json(updatedJob);
+        return res.status(200).json(findJob);
     } catch (error) {
         return next(error);
     }
 }
 
 const deleteUserFromJob = async (req, res, next) => {
-    
+
     try {
         const { _id: jobId } = req.body;
-        const { userId } = req.body;
+        const { id: userId } = req.authority;
 
         const deleteUserFromJob = await Job.findByIdAndUpdate(
             jobId,

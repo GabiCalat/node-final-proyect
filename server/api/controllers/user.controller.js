@@ -17,6 +17,8 @@ const getAllUsers = async (req, res, next) => {
 //--------------REGISTER USER
 const registerUser = async (req, res, next) => {
 
+
+
   try {
     const { body } = req;
 
@@ -83,7 +85,7 @@ const loginUser = async (req, res, next) => {
         rol: 'ADMIN'
       },
       req.app.get("secretKey"),
-      { expiresIn: "5m" }
+      { expiresIn: "3h" }
     );
 
     // Response
@@ -122,40 +124,15 @@ const logoutUser = async (req, res, next) => {
 //----------------------GET USER BY ID
 const getUserById = async (req, res, next) => {
 
+  
   const { id } = req.params;
   try {
 
-    const userById = await User.findById(id);
-    return res.json({
-      status: 200,
-      message: httpStatusCode[200],
-      data: { user: userById },
-    });
-  } catch (error) {
-    return next(error)
-  }
-};
+    console.log(id);
 
-//----------------------GET USER CONTACTS
-const getUserContacts = async (req, res, next) => {
-
-  const { id } = req.authority;
-  try {
-
-    const userById = await User.findById(id)
-      .select({ contacts: 1, _id: 0 }).populate('contacts');
-
-    const userContacts = userById.contacts.map((contact) => ({
-      name: contact.name,
-      surname: contact.surname,
-      id: contact._id
-    }));
-
-    return res.json({
-      status: 200,
-      message: httpStatusCode[200],
-      data: { contacts: userContacts },
-    });
+    const userbyid = await User.findById(id);
+    return res.status(200).json(userbyid);
+  
   } catch (error) {
     return next(error)
   }
@@ -166,6 +143,7 @@ const editUser = async (req, res, next) => {
 
   const userPhoto = req.file_url;// me traigo la url de la foto
   const bodyData = req.body;
+  console.log(userPhoto,bodyData);
   //revisamos si nos llega una imagen por el body
   if (userPhoto) { bodyData.image = userPhoto }
   const { id: userId } = req.authority;
@@ -200,7 +178,7 @@ const addNewContact = ('/', async (req, res, next) => {
 
     const user = await User.findById(userId).select({ contacts: 1, _id: 0 })
 
-    if (user.contacts.indexOf(contactId) !== -1) {
+    if (user.contacts.indexOf(contactId) === 0) {
       const error = new Error('the user you are trying to add is already in your contacts list');
       return next(error);
     }
@@ -218,4 +196,4 @@ const addNewContact = ('/', async (req, res, next) => {
   }
 });
 
-export { registerUser, getUserContacts, getAllUsers, loginUser, logoutUser, getUserById, editUser, addNewContact };
+export { registerUser, getAllUsers, loginUser, logoutUser, getUserById, editUser, addNewContact };

@@ -90,6 +90,23 @@ const addUserToJob = async (req, res, next) => {
   }
   }
 
+  const deleteUserToJob = async (req, res, next) => {
+    console.log('entro');
+    try {       
+    const { _id } = req.body;  
+    const { userId } = req.body;
+    console.log(_id,userId,5);
+    const deleteUserToJob = await Job.findByIdAndUpdate(
+        _id ,
+          { $splice: { candidate_list: userId } },
+        //   { new: true }
+      );
+      return res.status(200).json(deleteUserToJob);
+  } catch (error) {
+      return next(error);
+  }
+  }
+
   //funcion para eliminar subscripciond e usuario, En pruebas. Oscar
 //   const deleteUserToJob = async (req, res, next) => {
 
@@ -144,4 +161,4 @@ const addUserToJob = async (req, res, next) => {
 // };
 
 
-export { getAllJobs, getJobById, createJob, addUserToJob };
+export { getAllJobs, getJobById, createJob, addUserToJob, deleteUserToJob };

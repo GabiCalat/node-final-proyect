@@ -64,17 +64,22 @@ server.use((err, req, res, next) => {
     console.log(`Node server listening on port http:${PORT}`)
 });
 
-/*
+
 const io = new Server(serverListen, {
     cors: {
-        origin: "*"
+        origin: "http://localhost:3000"
     }
 });
 
 io.on('connection', (socket) => {
-    console.log(socket.id);
-    socket.on('custom-event', (number, string, obj) => {
-
-        console.log(number, string, obj);
+    console.log(socket.id)
+    socket.on('send-message', (message) => {
+        console.log(message);
+        io.emit('receive-message', message)
+        // socket.to(room).emit("receive-message", message)
     })
-}); */
+    // socket.on("join-room", room => {
+    //     console.log('está en el room');
+    //     socket.join(room)
+    // })
+});

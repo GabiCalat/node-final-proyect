@@ -1,5 +1,6 @@
 import express from "express";
 import 'dotenv/config';
+import { Server, Socket } from "socket.io"
 
 import { connection } from "./server/config/database.js"
 import cors from "cors";
@@ -58,7 +59,8 @@ server.use((err, req, res, next) => {
 });
 
 //SERVER LISTEN
-server.listen(PORT, () => {
+
+const serverListen=server.listen(PORT, () => {
     console.log(`Node server listening on port http:${PORT}`)
 });
 

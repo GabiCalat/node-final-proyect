@@ -124,18 +124,15 @@ const logoutUser = async (req, res, next) => {
 //----------------------GET USER BY ID
 const getUserById = async (req, res, next) => {
 
-
+  
   const { id } = req.params;
   try {
 
     console.log(id);
 
-    const userbyid = await Employers.findById(id);
-    return res.json({
-      status: 200,
-      message: httpStatusCode[200],
-      data: { user: userbyid },
-    });
+    const userbyid = await User.findById(id);
+    return res.status(200).json(userbyid);
+  
   } catch (error) {
     return next(error)
   }
@@ -146,6 +143,7 @@ const editUser = async (req, res, next) => {
 
   const userPhoto = req.file_url;// me traigo la url de la foto
   const bodyData = req.body;
+  console.log(userPhoto,bodyData);
   //revisamos si nos llega una imagen por el body
   if (userPhoto) { bodyData.image = userPhoto }
   const { id: userId } = req.authority;

@@ -83,7 +83,7 @@ const loginUser = async (req, res, next) => {
         rol: 'ADMIN'
       },
       req.app.get("secretKey"),
-      { expiresIn: "3h" }
+      { expiresIn: "5m" }
     );
 
     // Response

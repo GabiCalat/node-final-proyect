@@ -124,7 +124,7 @@ const logoutUser = async (req, res, next) => {
 //----------------------GET USER BY ID
 const getUserById = async (req, res, next) => {
 
-  
+
   const { id } = req.params;
   try {
 
@@ -132,7 +132,7 @@ const getUserById = async (req, res, next) => {
 
     const userbyid = await User.findById(id);
     return res.status(200).json(userbyid);
-  
+
   } catch (error) {
     return next(error)
   }
@@ -178,7 +178,7 @@ const editUser = async (req, res, next) => {
 
   const userPhoto = req.file_url;// me traigo la url de la foto
   const bodyData = req.body;
-  console.log(userPhoto,bodyData);
+  console.log(userPhoto, bodyData);
   //revisamos si nos llega una imagen por el body
   if (userPhoto) { bodyData.image = userPhoto }
   const { id: userId } = req.authority;
@@ -213,7 +213,7 @@ const addNewContact = ('/', async (req, res, next) => {
 
     const user = await User.findById(userId).select({ contacts: 1, _id: 0 })
 
-    if (user.contacts.indexOf(contactId) === 0) {
+    if (user.contacts.indexOf(contactId) !== -1) {
       const error = new Error('the user you are trying to add is already in your contacts list');
       return next(error);
     }
@@ -231,4 +231,21 @@ const addNewContact = ('/', async (req, res, next) => {
   }
 });
 
-export { registerUser, getAllUsers, loginUser, logoutUser, getUserById, editUser, addNewContact,getUserContacts };
+const deleteContact = ('/', async (req, res, next) => {
+
+  const { id: userId } = req.authority;
+  const { contactId } = req.body;
+
+  try {
+    await User.findByIdAndUpdate(
+      userId,
+      { $pull: { contacts: contactId } }
+    )
+    return res.status(200).json(`the contact ${contactId} was added deleted correctly`);
+
+  } catch (error) {
+    next(error)
+  }
+})
+
+export { registerUser, getAllUsers, loginUser, logoutUser, getUserById, editUser, addNewContact, getUserContacts, deleteContact };

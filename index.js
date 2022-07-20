@@ -74,7 +74,7 @@ const io = new Server(serverListen, {
 io.on('connection', (socket) => {
     console.log(socket.id)
     socket.on('send-message', (message) => {
-        console.log(message);
+        // console.log(message);
         io.emit('receive-message', message)
         // socket.to(room).emit("receive-message", message)
     })

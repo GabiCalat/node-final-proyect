@@ -6,7 +6,7 @@ const getAllJobs = async (req, res, next) => {
 
     try {
         const jobs = await Job.find().populate('id_company');
-         return res.status(200).json(jobs);
+        return res.status(200).json(jobs);
         // return res.json({
         //     status: 200,
         //     message: httpStatusCode[200],
@@ -26,7 +26,7 @@ const getJobById = async (req, res, next) => {
         const { id } = req.params;
 
         const jobById = await Job.findById(id);
-         return res.status(200).json(jobById);
+        return res.status(200).json(jobById);
         // return res.json({
         //     status: 200,
         //     message: httpStatusCode[200],
@@ -75,40 +75,39 @@ const createJob = async (req, res, next) => {
 //FUNCION PARA VINCULAR USUARIO A OFERTA DE TRABAJO- EN PRUEBAS-- OSCAR
 const addUserToJob = async (req, res, next) => {
 
-    try {       
-    const { _id } = req.body;  
-    const { userId } = req.body;
-    //console.log(_id,userId,5);
-    const updatedJob = await Job.findByIdAndUpdate(
-        _id ,
-          { $push: { candidate_list: userId } },
-          { new: true }
-      );
-      return res.status(200).json(updatedJob);
-  } catch (error) {
-      return next(error);
-  }
-  }
+    try {
+        const { _id } = req.body;
+        const { userId } = req.body;
+        //console.log(_id,userId,5);
+        const updatedJob = await Job.findByIdAndUpdate(
+            _id,
+            { $push: { candidate_list: userId } },
+            { new: true }
+        );
+        return res.status(200).json(updatedJob);
+    } catch (error) {
+        return next(error);
+    }
+}
 
-  const deleteUserToJob = async (req, res, next) => {
-    console.log('entro');
-    try {       
-    const { _id } = req.body;  
-    const { userId } = req.body;
-    console.log(_id,userId,5);
-    const deleteUserToJob = await Job.findByIdAndUpdate(
-        _id ,
-          { $splice: { candidate_list: userId } },
-        //   { new: true }
-      );
-      return res.status(200).json(deleteUserToJob);
-  } catch (error) {
-      return next(error);
-  }
-  }
+const deleteUserFromJob = async (req, res, next) => {
+    
+    try {
+        const { _id: jobId } = req.body;
+        const { userId } = req.body;
 
-  //funcion para eliminar subscripciond e usuario, En pruebas. Oscar
-//   const deleteUserToJob = async (req, res, next) => {
+        const deleteUserFromJob = await Job.findByIdAndUpdate(
+            jobId,
+            { $pull: { candidate_list: userId } }
+        );
+        return res.status(200).json(deleteUserFromJob);
+    } catch (error) {
+        return next(error);
+    }
+}
+
+//funcion para eliminar subscripciond e usuario, En pruebas. Oscar
+//   const deleteUserFromJob = async (req, res, next) => {
 
 //     try {       
 //     const { _id } = req.body;  
@@ -161,4 +160,4 @@ const addUserToJob = async (req, res, next) => {
 // };
 
 
-export { getAllJobs, getJobById, createJob, addUserToJob, deleteUserToJob };
+export { getAllJobs, getJobById, createJob, addUserToJob, deleteUserFromJob };

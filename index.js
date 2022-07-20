@@ -60,4 +60,25 @@ server.use((err, req, res, next) => {
 //SERVER LISTEN
 server.listen(PORT, () => {
     console.log(`Node server listening on port http:${PORT}`)
-})
+});
+
+
+const io = new Server(serverListen, {
+    cors: {
+        origin: "http://localhost:3000"
+    }
+});
+
+io.on('connection', (socket) => {
+    console.log(socket.id)
+    socket.on('send-message', (message) => {
+        console.log(message);
+        io.emit('receive-message', message)
+        // socket.to(room).emit("receive-message", message)
+    })
+    // socket.on("join-room", room => {
+    //     console.log('está en el room');
+    //     socket.join(room)
+    // })
+    
+});

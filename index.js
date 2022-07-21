@@ -73,15 +73,17 @@ const io = new Server(serverListen, {
 
 global.onlineUsers = new Map();
 io.on("connection", (socket) => {
+    // console.log(socket.id);
     global.chatSocket = socket;
     socket.on("add-user", (userId) => {
         onlineUsers.set(userId, socket.id);
     });
-
+    
     socket.on("send-msg", (data) => {
         const sendUserSocket = onlineUsers.get(data.to);
+        console.log(sendUserSocket, data.message);
         if (sendUserSocket) {
-            socket.to(sendUserSocket).emit("msg-recieve", data.msg);
+            socket.to(sendUserSocket).emit("msg-recieve", data.message);
         }
     });
 });

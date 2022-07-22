@@ -13,7 +13,7 @@ const userSchema = new Schema(
     habilities: { type: String },
     image: { type: String },
     contacts: [{ type: mongoose.Types.ObjectId, ref: 'User', required: false }],
-    applied_jobs: [{ type: mongoose.Types.ObjectId, ref: 'Companies', required: false }],
+    applied_jobs: [{ type: mongoose.Types.ObjectId, ref: 'Jobs', required: false }],
 
   },
   {

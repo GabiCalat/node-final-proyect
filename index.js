@@ -7,7 +7,7 @@ import cors from "cors";
 
 //ROUTES
 //import { employersRoutes } from "./server/api/routes/employers.routes.js";
-import { companiesRoutes } from "./server/api/routes/companies.routes.js";
+// import { companiesRoutes } from "./server/api/routes/companies.routes.js";
 import { userRoutes } from "./server/api/routes/user.routes.js";
 import { messagesRoutes } from "./server/api/routes/messages.routes.js";
 import { jobRoutes } from "./server/api/routes/jobs.routes.js";
@@ -42,7 +42,7 @@ router.get('/', (req, res) => {
 
 server.use('/', router);
 //server.use("/employers", employersRoutes);
-server.use("/companies", companiesRoutes);
+// server.use("/companies", companiesRoutes);
 server.use("/users", userRoutes);
 server.use("/messages", messagesRoutes);
 server.use("/jobs", jobRoutes);

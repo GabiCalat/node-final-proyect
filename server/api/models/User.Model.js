@@ -7,6 +7,7 @@ const userSchema = new Schema(
     surname: { type: String, required: true },
     email: { type: String, required: true },
     password: { type: String, required: true },
+    account_type: { type: String, required: true },
     studies: { type: String },
     age: { type: Number },
     description: { type: String },
@@ -14,7 +15,6 @@ const userSchema = new Schema(
     image: { type: String },
     contacts: [{ type: mongoose.Types.ObjectId, ref: 'User', required: false }],
     applied_jobs: [{ type: mongoose.Types.ObjectId, ref: 'Jobs', required: false }],
-
   },
   {
     timestamps: true,

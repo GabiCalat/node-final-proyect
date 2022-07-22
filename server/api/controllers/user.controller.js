@@ -17,12 +17,9 @@ const getAllUsers = async (req, res, next) => {
 //--------------REGISTER USER
 const registerUser = async (req, res, next) => {
 
-
-
   try {
     const { body } = req;
 
-    // Comprobar usuario
     const previousUser = await User.findOne({ email: body.email });
 
     if (previousUser) {
@@ -39,6 +36,7 @@ const registerUser = async (req, res, next) => {
       surname: body.surname,
       email: body.email,
       password: pwdHash,
+      account_type: body.account_type,
       applied_jobs: []
     });
 
@@ -82,7 +80,7 @@ const loginUser = async (req, res, next) => {
       {
         id: user._id,
         email: user.email,
-        rol: 'ADMIN'
+        rol: user.account_type
       },
       req.app.get("secretKey"),
       { expiresIn: "3h" }
@@ -210,11 +208,18 @@ const addNewContact = ('/', async (req, res, next) => {
   try {
 
     const user = await User.findById(userId).select({ contacts: 1, _id: 0 })
+    const contact = await User.findById(contactId).select({ contacts: 1, _id: 0 })
 
-    if (user.contacts.indexOf(contactId) !== -1) {
+    if (user.contacts.indexOf(contactId) !== -1 || contact.contacts.indexOf(userId) !== -1) {
       const error = new Error('the user you are trying to add is already in your contacts list');
       return next(error);
     }
+
+    await User.updateOne(
+      { _id: contactId },
+      { $push: { contacts: userId } },
+      { new: true }
+    );
 
     await User.updateOne(
       { _id: userId },

@@ -106,6 +106,11 @@ const deleteUserFromJob = async (req, res, next) => {
         const { _id: jobId } = req.body;
         const { id: userId } = req.authority;
 
+        await User.updateOne(
+            { _id: userId },
+            { $pull: { applied_jobs: jobId } }
+        );
+
         const deleteUserFromJob = await Job.findByIdAndUpdate(
             jobId,
             { $pull: { candidate_list: userId } }

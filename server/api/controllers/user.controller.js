@@ -251,4 +251,19 @@ const deleteContact = ('/', async (req, res, next) => {
   }
 })
 
-export { registerUser, getAllUsers, loginUser, logoutUser, getUserById, editUser, addNewContact, getUserContacts, deleteContact };
+const deleteUser = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    console.log(id);
+    const userDelete = await User.findByIdAndDelete(id);
+    return res.json({
+      status: 200,
+      message: httpStatusCode[200],
+      data: { user: userDelete },
+    });
+  } catch (error) {
+    return next(error);
+  }
+};
+
+export { registerUser, getAllUsers, loginUser, logoutUser, getUserById, editUser, addNewContact, getUserContacts, deleteContact, deleteUser };

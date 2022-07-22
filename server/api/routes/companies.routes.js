@@ -10,7 +10,4 @@ companiesRoutes.post("/", createCompany);
 companiesRoutes.get("/name/:name", findCompanieByName);
 companiesRoutes.put("/modify/:id", editNamejob);
 
-// employersRoutes.post("/", createEmployer);
-
-
 export { companiesRoutes }

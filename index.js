@@ -7,7 +7,7 @@ import cors from "cors";
 
 //ROUTES
 //import { employersRoutes } from "./server/api/routes/employers.routes.js";
-import { companiesRoutes } from "./server/api/routes/companies.routes.js";
+// import { companiesRoutes } from "./server/api/routes/companies.routes.js";
 import { userRoutes } from "./server/api/routes/user.routes.js";
 import { messagesRoutes } from "./server/api/routes/messages.routes.js";
 import { jobRoutes } from "./server/api/routes/jobs.routes.js";
@@ -42,7 +42,7 @@ router.get('/', (req, res) => {
 
 server.use('/', router);
 //server.use("/employers", employersRoutes);
-server.use("/companies", companiesRoutes);
+// server.use("/companies", companiesRoutes);
 server.use("/users", userRoutes);
 server.use("/messages", messagesRoutes);
 server.use("/jobs", jobRoutes);
@@ -60,12 +60,35 @@ server.use((err, req, res, next) => {
 
 //SERVER LISTEN
 
-const serverListen=server.listen(PORT, () => {
+const serverListen = server.listen(PORT, () => {
     console.log(`Node server listening on port http:${PORT}`)
 });
 
-
 const io = new Server(serverListen, {
+    cors: {
+        origin: "http://localhost:3000",
+        credentials: true,
+    },
+});
+
+global.onlineUsers = new Map();
+io.on("connection", (socket) => {
+    // console.log(socket.id);
+    global.chatSocket = socket;
+    socket.on("add-user", (userId) => {
+        onlineUsers.set(userId, socket.id);
+    });
+    
+    socket.on("send-msg", (data) => {
+        const sendUserSocket = onlineUsers.get(data.to);
+        console.log(sendUserSocket, data.message);
+        if (sendUserSocket) {
+            socket.to(sendUserSocket).emit("msg-recieve", data.message);
+        }
+    });
+});
+
+/* const io = new Server(serverListen, {
     cors: {
         origin: "http://localhost:3000"
     }
@@ -74,13 +97,13 @@ const io = new Server(serverListen, {
 io.on('connection', (socket) => {
     console.log(socket.id)
     socket.on('send-message', (message) => {
-        // console.log(message);
+        console.log(message);
         io.emit('receive-message', message)
-        // socket.to(room).emit("receive-message", message)
+        socket.to(room).emit("receive-message", message)
     })
-    // socket.on("join-room", room => {
-    //     console.log('está en el room');
-    //     socket.join(room)
-    // })
+    socket.on("join-room", room => {
+        console.log('está en el room');
+        socket.join(room)
+    })
     
-});
+}); */

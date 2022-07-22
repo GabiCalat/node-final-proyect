@@ -1,5 +1,6 @@
 import { Job } from "../models/job.models.js";
 import { httpStatusCode } from "../../utils/seeds/httpStatusCode.js"
+import { User } from "../models/user.model.js";
 
 
 const getAllJobs = async (req, res, next) => {
@@ -51,7 +52,6 @@ const createJob = async (req, res, next) => {
             salary: body.salary,
             description: body.description,
             requiremets: body.requiremets,
-            candidate_list: []
         });
 
         const savedJob = await newJob.save();
@@ -67,7 +67,6 @@ const createJob = async (req, res, next) => {
     }
 };
 
-
 //FUNCION PARA VINCULAR USUARIO A OFERTA DE TRABAJO- EN PRUEBAS-- OSCAR
 const addUserToJob = async (req, res, next) => {
 
@@ -75,13 +74,20 @@ const addUserToJob = async (req, res, next) => {
         const { _id: jobId } = req.body;
         const { id: userId } = req.authority;
 
+        const findJob = await Job.findById(jobId);
+        const findUser = await User.findById(userId);
 
-        const findJob = await Job.findById(jobId)
-        //controlar que no se pueda agregar el mismo usuario dos veces
-        if (findJob.candidate_list.indexOf(userId) !== -1) {
-            const error = new Error('the user you are trying to has already applied to this job');
+        //controlar que no se pueda agregar el mismo usuario o trabajo dos veces
+        if (findJob.candidate_list.indexOf(userId) !== -1 || findUser.applied_jobs.indexOf(jobId) !== -1) {
+            const error = new Error('this user already applied to this job');
             return next(error);
         }
+
+        await User.updateOne(
+            { _id: userId },
+            { $push: { applied_jobs: jobId } },
+            { new: true }
+        );
 
         await Job.updateOne(
             { _id: jobId },

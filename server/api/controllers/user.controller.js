@@ -124,11 +124,11 @@ const logoutUser = async (req, res, next) => {
 //----------------------GET USER BY ID
 const getUserById = async (req, res, next) => {
 
-
   const { id } = req.params;
   try {
 
-    const userbyid = await User.findById(id);
+    const userbyid = await User.findById(id)
+      .select({ password: 0 });
     return res.status(200).json(userbyid);
 
   } catch (error) {
@@ -143,9 +143,8 @@ const getUserContacts = async (req, res, next) => {
 
   try {
 
-    const userById = await User.findById(id)
+    const userById = await User.findById(id).select({ contacts: 1, _id: 0 }).populate('contacts');
 
-      .select({ contacts: 1, _id: 0 }).populate('contacts');
     const userContacts = userById.contacts.map((contact) => ({
 
       name: contact.name,
@@ -176,16 +175,21 @@ const editUser = async (req, res, next) => {
 
   const userPhoto = req.file_url;// me traigo la url de la foto
   const bodyData = req.body;
-  console.log(userPhoto, bodyData);
-  //revisamos si nos llega una imagen por el body
+
   if (userPhoto) { bodyData.image = userPhoto }
   const { id: userId } = req.authority;
 
   try {
-    // creamos el objeto con los campos que vamos a modificar
+    const user = await User.findById(userId)
     const userModify = new User(bodyData);
+
     //Para evitar que se modifique el id de mongo:
+    console.log(user);
     userModify._id = userId;
+    userModify.contacts = user.contacts;
+    // userModify.contacts = [...user.contacts]
+    userModify.applied_jobs = user.applied_jobs;
+    // userModify.applied_jobs = [...user.applied_jobs]
     //buscamos por el id y le pasamos los campos a modificar
     await User.findByIdAndUpdate(userId, userModify);
 

@@ -17,9 +17,10 @@ userRoutes.post('/', registerUser);
 userRoutes.post('/login', loginUser);
 userRoutes.post('/logout', logoutUser);
 
+userRoutes.put('/edit', [isAuth, upload.single('image'), uploadToCloudinary], editUser);
+
 userRoutes.put('/addContact', [isAuth], addNewContact);
 userRoutes.put('/deleteContact', [isAuth], deleteContact);
-userRoutes.put('/edit', [isAuth, upload.single('image'), uploadToCloudinary], editUser);
 userRoutes.delete('/:id', deleteUser);
 
 export { userRoutes };

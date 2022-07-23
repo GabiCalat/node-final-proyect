@@ -149,7 +149,8 @@ const getUserContacts = async (req, res, next) => {
 
       name: contact.name,
       surname: contact.surname,
-      id: contact._id
+      id: contact._id,
+      image: contact.image
 
     }));
     return res.json({
@@ -184,7 +185,6 @@ const editUser = async (req, res, next) => {
     const userModify = new User(bodyData);
 
     //Para evitar que se modifique el id de mongo:
-    console.log(user);
     userModify._id = userId;
     userModify.contacts = user.contacts;
     // userModify.contacts = [...user.contacts]

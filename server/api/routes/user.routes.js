@@ -11,7 +11,7 @@ const userRoutes = express.Router();
 
 userRoutes.get('/contacts', [isAuth], getUserContacts);
 userRoutes.get("/:id", getUserById);
-userRoutes.get('/usuarios', getAllUsers);
+userRoutes.get('/', getAllUsers);
 
 userRoutes.post('/', registerUser);
 userRoutes.post('/login', loginUser);

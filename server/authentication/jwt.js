@@ -30,7 +30,8 @@ const isAuth = (req, res, next) => {
 
     const authority = {
         id: token.id,
-        email: token.email
+        email: token.email,
+        rol: token.rol
     }
 
     req.authority = authority;

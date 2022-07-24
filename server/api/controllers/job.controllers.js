@@ -6,7 +6,7 @@ import { User } from "../models/user.model.js";
 const getAllJobs = async (req, res, next) => {
 
     try {
-        const jobs = await Job.find().populate('id_company');
+        const jobs = await Job.find()
         return res.status(200).json(jobs);
         // return res.json({
         //     status: 200,
@@ -43,12 +43,21 @@ const getJobById = async (req, res, next) => {
 const createJob = async (req, res, next) => {
 
     const { body } = req;
+    const { id: userId, rol } = req.authority
 
     try {
 
+        if (rol !== "Recruiter") {
+
+            const error = {
+                status: 401,
+                message: 'You are not a recruiter, you cannot create jobs'
+            };
+            return next(error);
+        }
+
         const newJob = new Job({
             name: body.name,
-            id_company: body.id_company,
             salary: body.salary,
             description: body.description,
             requiremets: body.requiremets,
@@ -56,11 +65,14 @@ const createJob = async (req, res, next) => {
 
         const savedJob = await newJob.save();
 
+        await User.findByIdAndUpdate(userId, { $push: { created_jobs: savedJob._id } })
+
         return res.json({
             status: 201,
             message: 'Job Registered successfully',
             data: savedJob
         });
+
     } catch (error) {
         return next(error);
 

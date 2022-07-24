@@ -86,7 +86,6 @@ const loginUser = async (req, res, next) => {
       { expiresIn: "3h" }
     );
 
-    // Response
     return res.json({
       status: 200,
       message: httpStatusCode[200],
@@ -169,6 +168,22 @@ const getUserContacts = async (req, res, next) => {
 
   }
 
+};
+
+
+const getRecruiterJobs = async (req, res, next) => {
+
+  const { id: user_id } = req.authority;
+
+  try {
+    const users = await User.findById(user_id).populate('created_jobs')
+
+    const recruiterJobs = { createdJobs: users.created_jobs };
+
+    return res.status(200).json(recruiterJobs);
+  } catch (error) {
+    return next(error)
+  }
 };
 
 //-------------------------EDIT USER
@@ -275,4 +290,4 @@ const deleteUser = async (req, res, next) => {
   }
 };
 
-export { registerUser, getAllUsers, loginUser, logoutUser, getUserById, editUser, addNewContact, getUserContacts, deleteContact, deleteUser };
+export { registerUser, getAllUsers, loginUser, logoutUser, getUserById, editUser, addNewContact, getUserContacts, deleteContact, deleteUser, getRecruiterJobs };

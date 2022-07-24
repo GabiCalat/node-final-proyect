@@ -5,8 +5,6 @@ const Schema = mongoose.Schema;
 const JobSchema = new Schema(
     {
         name: { type: String, required: true },
-        id_company: { type: mongoose.Types.ObjectId, ref: 'Companies', required: false },//cambiaso a false para probar, volver a cambiar
-        // name_company: { type: mongoose.Types.ObjectId,ref: 'User', required: true },
         candidate_list: [{ type: mongoose.Types.ObjectId, ref: 'User', required: false }],
         salary: { type: Number, required: true },
         description: { type: String, required: true },

@@ -250,6 +250,10 @@ const deleteContact = ('/', async (req, res, next) => {
       userId,
       { $pull: { contacts: contactId } }
     )
+    await User.findByIdAndUpdate(
+      contactId,
+      { $pull: { contacts: userId } }
+    )
     return res.status(200).json(`the contact ${contactId} was added deleted correctly`);
 
   } catch (error) {
@@ -260,7 +264,6 @@ const deleteContact = ('/', async (req, res, next) => {
 const deleteUser = async (req, res, next) => {
   try {
     const { id } = req.params;
-    console.log(id);
     const userDelete = await User.findByIdAndDelete(id);
     return res.json({
       status: 200,

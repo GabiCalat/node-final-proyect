@@ -186,6 +186,27 @@ const getRecruiterJobs = async (req, res, next) => {
   }
 };
 
+
+const getUserJobs = async (req, res, next) => {
+
+  const { id: user_id } = req.authority;
+
+  try {
+    const users = await User.findById(user_id).populate('applied_jobs')
+
+    const jobsList = users.applied_jobs.map(job => ({
+      name: job.name,
+      salary: job.salary,
+      description: job.description,
+      requirements: job.requiremets
+    }));
+
+    return res.status(200).json(jobsList);
+  } catch (error) {
+    return next(error)
+  }
+};
+
 //-------------------------EDIT USER
 const editUser = async (req, res, next) => {
 
@@ -290,4 +311,4 @@ const deleteUser = async (req, res, next) => {
   }
 };
 
-export { registerUser, getAllUsers, loginUser, logoutUser, getUserById, editUser, addNewContact, getUserContacts, deleteContact, deleteUser, getRecruiterJobs };
+export { getUserJobs, registerUser, getAllUsers, loginUser, logoutUser, getUserById, editUser, addNewContact, getUserContacts, deleteContact, deleteUser, getRecruiterJobs };

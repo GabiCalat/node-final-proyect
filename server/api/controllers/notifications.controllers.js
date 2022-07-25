@@ -12,7 +12,8 @@ const sendNotification = async (req, res, next) => {
             type: type,
             to: to,
             from: from
-        })
+        });
+
         if (newNotification) return res.json("Notification send succesfully.")
         return res.json({ msg: "Failed to add send notification." })
     } catch (error) {
@@ -26,8 +27,8 @@ const getUserNotificationsById = async (req, res, next) => {
     const { id: to } = req.authority;
 
     try {
-        const notifications = await Notification.find({ to: to})
-        .sort({ updatedAt: -1 })
+        const notifications = await Notification.find({ to: to }).populate('from', ['name', 'surname', 'image'])
+            .sort({ updatedAt: -1 })
 
         return res.json(notifications)
     } catch (error) {
@@ -35,4 +36,4 @@ const getUserNotificationsById = async (req, res, next) => {
     }
 }
 
-export {sendNotification, getUserNotificationsById }
+export { sendNotification, getUserNotificationsById }

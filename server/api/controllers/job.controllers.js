@@ -1,6 +1,7 @@
 import { Job } from "../models/job.models.js";
 import { httpStatusCode } from "../../utils/seeds/httpStatusCode.js"
 import { User } from "../models/user.model.js";
+import { Notification } from "../models/notifications.models.js";
 
 
 const getAllJobs = async (req, res, next) => {
@@ -48,16 +49,16 @@ const createJob = async (req, res, next) => {
     try {
 
         if (rol !== "Recruiter") {
-
             const error = {
                 status: 401,
                 message: 'You are not a recruiter, you cannot create jobs'
             };
             return next(error);
-        }
+        };
 
         const newJob = new Job({
             name: body.name,
+            recruiter_id: userId,
             salary: body.salary,
             description: body.description,
             requiremets: body.requiremets,
@@ -94,6 +95,19 @@ const addUserToJob = async (req, res, next) => {
             const error = new Error('this user already applied to this job');
             return next(error);
         }
+
+        const newNotification = await Notification.create({
+            from: userId,
+            to: findJob.recruiter_id,
+            view_status: false,
+            jobId: jobId,
+            type: "job_application"
+        });
+
+        if (!newNotification) {
+            const error = new Error('error creating the notification');
+            return next(error);
+        };
 
         await User.updateOne(
             { _id: userId },

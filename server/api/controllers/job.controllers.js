@@ -7,7 +7,7 @@ import { Notification } from "../models/notifications.models.js";
 const getAllJobs = async (req, res, next) => {
 
     try {
-        const jobs = await Job.find()
+        const jobs = await Job.find().populate('recruiter_id', ['name', 'surname'])
         return res.status(200).json(jobs);
         // return res.json({
         //     status: 200,
@@ -35,6 +35,23 @@ const getJobById = async (req, res, next) => {
         //     data: { jobs: jobbyid },
         // });
         //res.send(jobbyid);
+    } catch (error) {
+        return next(error)
+    }
+};
+
+const getJobByRecruiter = async (req, res, next) => {
+
+    try {
+        const { id } = req.authority;
+        const jobByRecrutier = await Job.find({ recruiter_id: id });
+
+        return res.status(200).json(jobByRecrutier);
+        // return res.json({
+        //     status: 200,
+        //     message: httpStatusCode[200],
+        //     data: { jobs: jobbyid },
+        // });
     } catch (error) {
         return next(error)
     }
@@ -201,4 +218,4 @@ const deleteUserFromJob = async (req, res, next) => {
 // };
 
 
-export { getAllJobs, getJobById, createJob, addUserToJob, deleteUserFromJob };
+export { getAllJobs, getJobByRecruiter, getJobById, createJob, addUserToJob, deleteUserFromJob };

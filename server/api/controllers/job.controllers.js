@@ -99,7 +99,7 @@ const addUserToJob = async (req, res, next) => {
         const newNotification = await Notification.create({
             from: userId,
             to: findJob.recruiter_id,
-            view_status: false,
+            view_status: "not seen",
             jobId: jobId,
             type: "job_application"
         });

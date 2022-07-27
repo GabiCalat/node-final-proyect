@@ -75,9 +75,6 @@ const notificationResolution = async (req, res, next) => {
     } catch (error) {
         return next(error);
     }
-
-
-
 }
 
 export { sendNotification, getUserNotificationsById, notificationResolution }

@@ -28,7 +28,7 @@ const getUserNotificationsById = async (req, res, next) => {
 
     try {
         const notifications = await Notification.find({ to: to })
-            .populate('from', ['name', 'surname', 'image'])
+            .populate('from', ['name', 'surname', 'image', 'email'])
             .populate('jobId', 'name')
             .sort({ updatedAt: -1 })
 

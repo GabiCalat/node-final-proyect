@@ -77,11 +77,11 @@ io.on("connection", (socket) => {
         onlineUsers.set(userId, socket.id);
     });
     
-    socket.on("send-msg", (data) => {
-        const sendUserSocket = onlineUsers.get(data.to);
-        console.log(sendUserSocket, data.message);
+    socket.on("send-msg", (msg, from ) => {
+        // console.log(from, msg.message);
+        const sendUserSocket = onlineUsers.get(msg.to);
         if (sendUserSocket) {
-            socket.to(sendUserSocket).emit("msg-recieve", data.message);
+            socket.to(sendUserSocket).emit("msg-recieve", msg.message, from);
         }
     });
 });
